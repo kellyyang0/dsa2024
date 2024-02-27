@@ -1,3 +1,5 @@
+import kotlin.math.exp
+import kotlin.math.floor
 import kotlin.math.pow
 
 /**
@@ -5,10 +7,10 @@ import kotlin.math.pow
  * @param original the unsorted list
  * @return the sorted list
  */
-fun radixSort(original:List<Double>): List<Double> {
-    val queueArray = Array<Queue<Double>>(10){Queue<Double>()}
-    val sortedList: MutableList<Double> = mutableListOf()
-    var exponent = 1.0
+fun radixSort(original:List<Int>): List<Int> {
+    val queueArray = Array(10){ArrayDeque<Int>()}
+    val sortedList: MutableList<Int> = original.toMutableList()
+    var exponent = 0
     var longest = 0
     val lengths: MutableList<Int> = mutableListOf()
 
@@ -19,23 +21,30 @@ fun radixSort(original:List<Double>): List<Double> {
         if(n.toInt()==0){count = 1}
 
         while (num > 0){
-            num %= 10
+            num /= 10
             count += 1
         }
-//        lengths.addLast(count)
+        lengths.addLast(count)
     }
 
     longest = lengths.max()
 
-    for(n in 0..longest) {
-        for (elem in original) {
+    assert(longest == original.maxOfOrNull { e -> e.toString().length })
+
+    for(n in 0..<longest) {
+
+        for (elem in sortedList) {
             val base = 10.0
-            val digit = (elem % base.pow(exponent)).toInt()
-            queueArray[digit].enqueue(elem)
+            val trunced = (elem / base.pow(exponent)).toInt()
+            val digit = trunced % 10
+            queueArray[digit].addFirst(elem)
         }
-        for (array in queueArray) {
-            while (queueArray.isNotEmpty()) {
-                sortedList.addLast(array.dequeue())
+
+        sortedList.clear()
+
+        for (queue in queueArray) {
+            while (!queue.isEmpty()) {
+                sortedList.addLast(queue.removeLast())
             }
         }
         exponent += 1
@@ -47,27 +56,29 @@ fun radixSort(original:List<Double>): List<Double> {
  * @param original the unsorted list
  * @return the sorted list          
  */                                 
-fun mergeSort(original: List<Double>): List<Double> {
-    if (original.size == 1){
-        return original
+fun mergeSort(original: List<Int>): List<Int> {
+    val list = original.toMutableList()
+
+    if (list.size < 2){
+        return list
     }
 
-    val firstPart = original.subList(0,original.size/2)
-    val secondPart = original.subList(original.size/2, original.size)
+    val firstPart = list.subList(0,list.size/2)
+    val secondPart = list.subList(list.size/2, list.size)
 
     val sortedFirst = mergeSort(firstPart)
     val sortedSecond = mergeSort(secondPart)
 
-    val list: MutableList<Double> = mutableListOf()
+    val sorted: MutableList<Int> = mutableListOf()
 
-    while (sortedFirst.isNotEmpty() && sortedSecond.isNotEmpty()){
-        if(sortedFirst.first() < sortedSecond.first()){
-            list.addLast(sortedFirst.removeFirst())
+    while (sortedFirst.isNotEmpty() || sortedSecond.isNotEmpty()){
+        if((sortedFirst.firstOrNull() ?: Int.MAX_VALUE) < (sortedSecond.firstOrNull() ?: Int.MAX_VALUE)){
+            sorted.addLast(sortedFirst.removeFirst())
         } else {
-            list.addLast(sortedSecond.removeFirst())
+            sorted.addLast(sortedSecond.removeFirst())
         }
     }
-    return list
+    return sorted
 }
 
 /**
@@ -75,17 +86,22 @@ fun mergeSort(original: List<Double>): List<Double> {
  * @param original the unsorted list
  * @return the sorted list
  */
-fun selectionSort(original: List<Double>): List<Double> {
+fun selectionSort(original: List<Int>): List<Int> {
     val list = original.toMutableList()
 
-    for(i in 0..list.size - 1){
+    for(i in 0..<list.size){
         var min = list[i]
+        var minIndex = i
 
-        for (unsorted in i..list.size - 1){
+        for (j in i..<list.size){
+            val unsorted = list[j]
+
             if(unsorted<min){
-                min = unsorted.toDouble()
+                minIndex = j
+                min = unsorted
             }
         }
+        list[minIndex] = list[i]
         list[i] = min
     }
     return list
@@ -96,12 +112,12 @@ fun selectionSort(original: List<Double>): List<Double> {
  * @param original the unsorted list
  * @return the sorted list
  */
-fun heapSort(original: List<Double>): List<Double> {
-    val list = original.toMutableList()
-    val heap = MinHeap<Double>()
+fun heapSort(original: List<Int>): List<Int> {
+    val list = mutableListOf<Int>()
+    val heap = MinHeap<Int>()
 
     for (num in original) {
-        heap.insert(num, num)
+        heap.insert(num, num.toDouble())
     }
 
     while (!heap.isEmpty()){

@@ -2,18 +2,25 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import kotlin.random.Random
 
 class SortsKtTest {
-    var unsortedList = listOf<Double>()
-    val sortedList = listOf(0.0, 1.0, 2.0, 3.0, 4.0, 5.0)
+    var unsortedList = listOf<Int>()
+    var sortedList = listOf<Int>()
     @BeforeEach
     fun setUp() {
-        val toDoubles = (0..5).map { e -> e.toDouble() }
-        unsortedList = toDoubles.toList().shuffled()
+        val toDoubles = (0..10).map { e -> e.toDouble() }
+        // unsortedList = toDoubles.toList().shuffled()
+        unsortedList = listOf(0, 1, 10, 100).shuffled()
+        sortedList = unsortedList.sorted()
     }
     @Test
     fun radixSort() {
-        assertEquals(radixSort(unsortedList), sortedList)
+//         assertEquals(radixSort(unsortedList), sortedList)
+
+        val allDigits = (0..10).toList().shuffled()
+
+        assertEquals(allDigits.sorted(), radixSort(allDigits))
     }
 
     @Test
@@ -29,5 +36,10 @@ class SortsKtTest {
     @Test
     fun heapSort() {
         assertEquals(heapSort(unsortedList), sortedList)
+
+        val allDigits = (0..1000000).toList().shuffled()
+
+        assertEquals(allDigits.sorted(), radixSort(allDigits))
+
     }
 }

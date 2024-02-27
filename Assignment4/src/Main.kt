@@ -1,7 +1,27 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-fun main() {
-    val list = (0..10).toList().shuffled()
+import java.io.FileOutputStream
+import java.io.OutputStream
 
-    mergeSort(list.map { e -> e.toDouble() })
+fun main() {
+    val analyzer = Analyzer()
+    val measurements = analyzer.measureAll()
+
+    println(measurements)
+
+    FileOutputStream("results.csv").apply { writeCsv(measurements) }
+}
+
+fun OutputStream.writeCsv(measurements: Map<String, Map<Int, Int>>) {
+    val writer = bufferedWriter()
+    writer.write(""""Algorithm", "Size", "Time"""")
+    writer.newLine()
+    measurements.forEach {alg ->
+        val sortName = alg.key
+        alg.value.forEach {
+            writer.write("\"$sortName Sort\", ${it.key}, ${it.value}")
+            writer.newLine()
+        }
+    }
+    writer.flush()
 }
