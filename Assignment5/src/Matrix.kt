@@ -40,7 +40,7 @@ class Matrix(private val row: Int, private val col: Int){
         val resultMatrix = Matrix(aRows, bCols)
 
         for (i in 0..<aRows){
-            for (j in 0..bCols){
+            for (j in 0..<bCols){
                 resultMatrix[i, j] = this[i, j] + other[i,j]
             }
         }
@@ -89,10 +89,10 @@ class Matrix(private val row: Int, private val col: Int){
 
         val resultMatrix = Matrix(aRows, bCols)
 
-        for (i in 0..aRows){
-            for (j in 0..bCols){
+        for (i in 0..<aRows){
+            for (j in 0..<bCols){
                 var sum = 0
-                for (k in 0..aCols){
+                for (k in 0..<aCols){
                     sum = this[i, k] * other[k, j]
                     resultMatrix[i, j] = sum
                 }
@@ -126,7 +126,7 @@ class Matrix(private val row: Int, private val col: Int){
         val bCols = other.getColLength()
 
         if (aRows != aCols || bRows != bCols || aRows != bCols){
-                throw IllegalArgumentException("mismatched size")
+            throw IllegalArgumentException("mismatched size")
         }
 
         val resultMatrix = Matrix(aRows,aRows)
@@ -148,8 +148,8 @@ class Matrix(private val row: Int, private val col: Int){
         val b21 = Matrix(half, half)
         val b22 = Matrix(half, half)
 
-        for ( i in 0..half){
-            for (j in 0..half){
+        for ( i in 0..<half){
+            for (j in 0..<half){
                 a11[i,j] = this[i,j]
                 a12[i,j] = this[i+half,j]
                 a21[i,j] = this[i,j+half]
