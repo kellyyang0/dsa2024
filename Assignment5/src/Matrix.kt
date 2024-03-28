@@ -40,7 +40,7 @@ class Matrix(private val row: Int, private val col: Int){
         val resultMatrix = Matrix(aRows, bCols)
 
         for (i in 0..<aRows){
-            for (j in 0..bCols){
+            for (j in 0..<bCols){
                 resultMatrix[i, j] = this[i, j] + other[i,j]
             }
         }
@@ -89,11 +89,11 @@ class Matrix(private val row: Int, private val col: Int){
 
         val resultMatrix = Matrix(aRows, bCols)
 
-        for (i in 0..aRows){
-            for (j in 0..bCols){
+        for (i in 0..<aRows){
+            for (j in 0..<bCols){
                 var sum = 0
-                for (k in 0..aCols){
-                    sum = this[i, k] * other[k, j]
+                for (k in 0..<aCols){
+                    sum += this[i, k] * other[k, j]
                     resultMatrix[i, j] = sum
                 }
             }
@@ -114,8 +114,8 @@ class Matrix(private val row: Int, private val col: Int){
     }
 
     /**
-     * Multiply [this] matrix by [other].
-     * Your code should use Strassen's algorithm
+     * Multiply [this] matrix by [other] using Strassen's algorithm
+     * Function is named times so that it can be an operator
      * Note: returns null if dimensions of matrices are not the same
      * @return [this]*[other] if the dimensions are compatible and null otherwise
      */
@@ -126,7 +126,7 @@ class Matrix(private val row: Int, private val col: Int){
         val bCols = other.getColLength()
 
         if (aRows != aCols || bRows != bCols || aRows != bCols){
-                throw IllegalArgumentException("mismatched size")
+            throw IllegalArgumentException("mismatched size")
         }
 
         val resultMatrix = Matrix(aRows,aRows)
@@ -148,8 +148,8 @@ class Matrix(private val row: Int, private val col: Int){
         val b21 = Matrix(half, half)
         val b22 = Matrix(half, half)
 
-        for ( i in 0..half){
-            for (j in 0..half){
+        for (i in 0..<half){
+            for (j in 0..<half){
                 a11[i,j] = this[i,j]
                 a12[i,j] = this[i+half,j]
                 a21[i,j] = this[i,j+half]
