@@ -9,7 +9,7 @@ fun needlemanWunsch(sequence1: String, sequence2: String): Pair<String, String> 
     val grid = Matrix(gridRow, gridCol)
 
     //Scores, change for diff scoring systems
-    val match = 1
+    val match = 2
     val indel = -1
     val mismatch = -1
 
